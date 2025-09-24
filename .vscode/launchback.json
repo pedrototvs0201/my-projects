@@ -1,0 +1,89 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "totvs_language_debug",
+			"request": "launch",
+			"name": "TOTVS Language Debug",
+			"program": "${command:AskForProgramName}",
+			"cwb": "${workspaceFolder}",
+			"smartclientBin": "C:\\TOTVS\\Protheus2310\\Protheus\\bin\\smartclient\\smartclient.exe",
+			"isMultiSession": true,
+			"enableTableSync": true,
+			"extendFeatures": {
+				"charDetails": false
+			},
+			"programArguments": [],
+			"enableMultiThread": true,
+			"enableProfile": false,
+			"isAccessibilityMode": false,
+			"doNotShowSplash": false,
+			"openglMode": false,
+			"dpiMode": false,
+			"olddpiMode": false,
+			"language": "1",
+			"ignoreFiles": true
+		}
+	],
+	"lastPrograms": [
+		{
+			"label": "SIGAMDI"
+		},
+		{
+			"label": "testeA"
+		},
+		{
+			"label": "meuconte.prw"
+		},
+		{
+			"label": "u_meufonte"
+		},
+		{
+			"label": "u_testeA"
+		},
+		{
+			"label": "u_adv001"
+		},
+		{
+			"label": "u_func1"
+		},
+		{
+			"label": "u_altPesag"
+		},
+		{
+			"label": "u_adv002"
+		},
+		{
+			"label": "U_ADV004"
+		},
+		{
+			"label": "U_ADV003"
+		},
+		{
+			"label": "U_ADV006"
+		},
+		{
+			"label": "U_verliga"
+		},
+		{
+			"label": "u_adv007"
+		},
+		{
+			"args": [],
+			"label": "u_adv007"
+		},
+		{
+			"args": [],
+			"label": "u_testeA"
+		},
+		{
+			"label": "u_adv009"
+		},
+		{
+			"args": [],
+			"label": "u_adv009"
+		}
+	],
+	"lastProgramExecuted": "u_func1",
+	"lastProgramArguments": []
+}

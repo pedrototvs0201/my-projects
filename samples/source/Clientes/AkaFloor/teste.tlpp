@@ -1,0 +1,24 @@
+#Include "protheus.ch"
+#Include "TopConn.ch"
+
+User Function WX_ENVIAPEDIDOS()
+
+  // Envio 1 - Via HttpPost com JSON como query param
+    Local cJson   := UrlEncode('{ "mensagem": "ola" }')
+    Local cUrl    := "https://b1b2-2804-1b1-b8c0-4817-2d89-75da-be0f-7ba5.ngrok-free.app/webhook/protheus?payload=" + cJson
+    Local oHttp   := Nil
+	    // Envio 2 - Via TCHttpClient com query params e corpo vazio (em bytes)
+   
+
+    // Corpo vazio, mas convertido para bytes
+    Local aBodyBytes := StringToBytes("")
+
+    oHttp := HttpPost(cUrl, "", "application/json")
+
+    If ValType(oHttp) == "O"
+        FWLogMsg("HTTPPOST: StatusCode: " + Str(oHttp:StatusCode))
+        FWLogMsg("HTTPPOST: Resposta: " + oHttp:Content)
+    Else
+        FWLogMsg("HTTPPOST: Erro ao enviar POST.")
+
+Return

@@ -1,7 +1,7 @@
 //Bibliotecas
 #Include "RWMake.ch"
 #INCLUDE "TOPCONN.CH"
-#INCLUDE "COLORS.CH"
+
 
 
 
@@ -112,12 +112,9 @@ User Function BOLSICOOB()
 		dbSkip()
 	Enddo
 
-	If nRegs = 0
-		MsgBox(OemToAnsi("Não há dados selecionados!"), "Mensagem", "ALERT")
-		QRY->(DbCloseArea())
-		Return
-	EndIf
-
+	
+			if MV_PAR04!='756' 
+	
 
 	DbGoTop()
 	ProcRegua(RecCount())
@@ -725,8 +722,7 @@ Static Function fLinhaDig(cCodBanco, ; // Codigo do Banco ()
 	cNroDoc   )  // Numero do Documento Ref ao Contas a Receber
 
 	Local cValorFinal := StrZero(int(Round(nValor*100,2)),10)
-	Local cFator      := StrZero( (dVencto - CtoD("03/07/2000")) + 1000, 4 )
-
+	Local cFator      :=  (dVencto - CtoD("03/07/2000")) + 1000
 
 
 	//em observação - acredito que sejam desnecessários
@@ -761,7 +757,11 @@ Static Function fLinhaDig(cCodBanco, ; // Codigo do Banco ()
 
 	_cNumDoBco  	:= SE1->E1_NUMBCO // Nosso numero
 
-
+	if cFator>9999 // logica para Fator de vencimento de boleto, foi alterada para titulos com vencimento a partir de 22/02/2025 , caso passe de 10.000 ele deve retornar para 1.000
+	 cFator      := StrZero(cFator-8999,4)
+	else 
+	cFator      := StrZero(cFator,4)
+	EndIf
 	//	-------------------------
 	//	Definicao do NOSSO NUMERO
 	//	-------------------------
@@ -916,7 +916,7 @@ Static Function fLinhaDig(cCodBanco, ; // Codigo do Banco ()
 	VVVVVVVVVV = Valor do Titulo
 	*/
 
-	cCampo5 := cFator + cValorFinal
+	cCampo5 := Strzero(cFator,4) + StrZero(cValorFinal,10)
 
 
 
@@ -963,7 +963,15 @@ Static Function Ret_cBarra(cBanco,cAgencia,cConta,cDacCC,cNroDoc,nValor,dVencto)
 	LOCAL cRN			:= ''
 	LOCAL cCB			:= ''
 	LOCAL cS				:= ''
-	LOCAL cFator      := strzero(dVencto - ctod("07/10/97"),4)
+	LOCAL cFator      := (dVencto - ctod("07/10/97"))
+
+
+	if  cFator >9999 // logica para Fator de vencimento de boleto, foi alterada para titulos com vencimento a partir de 22/02/2025 , caso passe de 10.000 ele deve retornar para 1.000
+	cFator := StrZero(cFator-9999,4)
+	else
+	cFator :=StrZero(cFator,4)   
+	EndIf
+
 
 //-----------------------------
 // Definicao do NOSSO NUMERO
@@ -1017,7 +1025,7 @@ Static Function Ret_cBarra(cBanco,cAgencia,cConta,cDacCC,cNroDoc,nValor,dVencto)
 // 	CAMPO 5:
 //	      UUUU = Fator de Vencimento
 //	VVVVVVVVVV = Valor do Titulo
-	cRN   += cFator + StrZero(Int(nValor * 100),14-Len(cFator))
+	cRN   += cFator + StrZero(Int(nValor * 100),10)
 
 Return({cCB,cRN,cNN})
 

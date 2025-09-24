@@ -1,4 +1,4 @@
-#INCLUDE "rwmake.ch"
+
 #INCLUDE "topconn.ch"
 #INCLUDE "totvs.ch"
 

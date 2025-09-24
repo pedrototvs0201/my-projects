@@ -112,11 +112,19 @@ User Function BLITAU()
 		dbSkip()
 	Enddo
 
-	If nRegs = 0
+		If mv_par04 != '341'  // validar se o banco informado é Itau
+		MsgBox(OemToAnsi("Banco informado não é Itaú!"), "Mensagem", "ALERT")
+		QRY->(DbCloseArea())
+		
+		Return U_BLITAU()
+	elseif nRegs = 0
 		MsgBox(OemToAnsi("Não há dados selecionados!"), "Mensagem", "ALERT")
 		QRY->(DbCloseArea())
-		Return
+		
+		Return U_BLITAU()
 	EndIf
+
+
 
 
 	DbGoTop()
@@ -725,7 +733,7 @@ Static Function fLinhaDig(cCodBanco, ; // Codigo do Banco ()
 	cNroDoc   )  // Numero do Documento Ref ao Contas a Receber
 
 	Local cValorFinal := StrZero(int(Round(nValor*100,2)),10)
-	Local cFator      := StrZero( (dVencto - CtoD("03/07/2000")) + 1000, 4 )
+	Local cFator      :=  (dVencto - CtoD("03/07/2000")) + 1000
 
 
 
@@ -749,6 +757,12 @@ Static Function fLinhaDig(cCodBanco, ; // Codigo do Banco ()
 	Local _cCodCAR 	:= Alltrim(SEE->EE_CODCART)
 	Local _cDV_CB		:= ""
 	Local _nI
+
+if cFator>9999 // logica para Fator de vencimento de boleto, foi alterada para titulos com vencimento a partir de 22/02/2025 , caso passe de 10.000 ele deve retornar para 1.000
+	 cFator      := StrZero(cFator-8999,4)
+	else 
+	cFator      := StrZero(cFator,4)
+	EndIf
 
 	_cCodCliente:='5008131'
 
@@ -963,7 +977,13 @@ Static Function Ret_cBarra(cBanco,cAgencia,cConta,cDacCC,cNroDoc,nValor,dVencto)
 	LOCAL cRN			:= ''
 	LOCAL cCB			:= ''
 	LOCAL cS				:= ''
-	LOCAL cFator      := strzero(dVencto - ctod("07/10/97"),4)
+	LOCAL cFator      := (dVencto - ctod("07/10/97"))
+
+if  cFator >9999 // logica para Fator de vencimento de boleto, foi alterada para titulos com vencimento a partir de 22/02/2025 , caso passe de 10.000 ele deve retornar para 1.000
+	cFator := StrZero(cFator-9999,4)
+	else
+	cFator :=StrZero(cFator,4)   
+	EndIf
 
 //-----------------------------
 // Definicao do NOSSO NUMERO
@@ -1130,7 +1150,7 @@ Static Function ValidPerg()
 	Aadd(_aPerguntas,{ cPerg    ,"01"      ,"Titulo de:    "              ,"mv_ch1"    ,"C"      ,09          ,0           ,0          ,"G"     ,""                             ,"MV_PAR01",""                 ,""                    ,""               ,""              ,""               ,"SE1"              ,"         "})
 	Aadd(_aPerguntas,{ cPerg    ,"02"      ,"Titulo Até:   "              ,"mv_ch2"    ,"C"      ,09          ,0           ,0          ,"G"     ,""                             ,"MV_PAR02",""                 ,""                    ,"" 			    ,""              ,""               ,"SE1"              ,"         "})
 	Aadd(_aPerguntas,{ cPerg    ,"03"      ,"Prefixo:      "              ,"mv_ch3"    ,"C"      ,03          ,0           ,0          ,"G"     ,""                             ,"MV_PAR03",""                 ,"" 		              ,""               ,""              ,""               ,"   "              ,"         "})
-	Aadd(_aPerguntas,{ cPerg    ,"04"      ,"Banco:        "       	      ,"mv_ch4"    ,"C"      ,03          ,0           ,0          ,"G"     ,""                             ,"MV_PAR04",""                 ,""       		      ,""               ,""              ,""               ,"SEE"              ,"         "})
+	Aadd(_aPerguntas,{ cPerg    ,"04"      ,"Banco:        "       	      ,"mv_ch4"    ,"C"      ,03          ,0           ,0          ,"G"     ,""                             ,"MV_PAR04",""                 ,""       		      ,""               ,""              ,""               ,"SA6"              ,"         "})
 	Aadd(_aPerguntas,{ cPerg    ,"05"      ,"Agencia:      "              ,"mv_ch5"    ,"C"      ,05          ,0           ,0          ,"G"     ,""                             ,"MV_PAR05",""                 ,""             		  ,""               ,""              ,""               ,"   "              ,"         "})
 	Aadd(_aPerguntas,{ cPerg    ,"06"      ,"Conta:        "              ,"mv_ch6"    ,"C"      ,10          ,0           ,0          ,"G"     ,""                             ,"MV_PAR06",""                 ,""          		  ,""               ,""              ,""               ,"   "              ,"         "})
 	Aadd(_aPerguntas,{ cPerg    ,"07"      ,"Parcela de:   "              ,"mv_ch7"    ,"C"      ,03          ,0           ,0          ,"G"     ,""                             ,"MV_PAR07",""                 ,""      	          ,""               ,""              ,""               ,"   "              ,"         "})
